@@ -15,7 +15,7 @@ const TABS: { id: Tab; title: string }[] = [
   { id: "topics", title: "Темы" }, { id: "materials", title: "Мои материалы" },
   { id: "checks", title: "Как проверяем" }, { id: "accreditation", title: "Аккредитация" },
 ];
-const EXAMPLE_PATH = ["arithmetic", "fractions", "percent", "linear-equations", "functions", "derivatives", "integrals"];
+const EXAMPLE_PATH = ["math-arithmetic", "math-fractions", "math-percent", "math-linear-equations", "math-functions", "math-derivatives", "math-integrals"];
 const STAGES = [
   ["Разобраться", "Короткое объяснение, пример и типичная ошибка."],
   ["Попробовать", "Решить задачу и получить обратную связь."],
@@ -39,7 +39,7 @@ function dateLabel(value: number) {
 export function KnowledgeHub() {
   const [tab, setTab] = useState<Tab>("topics");
   const [subject, setSubject] = useState<SubjectId>("math");
-  const [selectedId, setSelectedId] = useState("arithmetic");
+  const [selectedId, setSelectedId] = useState("math-arithmetic");
   const [search, setSearch] = useState("");
   const [branch, setBranch] = useState("");
   const [level, setLevel] = useState("");
