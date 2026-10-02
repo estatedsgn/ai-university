@@ -93,7 +93,7 @@ function view(row: AttemptRow, state: AttemptState, progress?: TopicProgress[]):
   return {
     id: row.id, topicId: row.topic_id, topicTitle: state.topicTitle, mode: row.mode,
     questionCount: state.questions.length, answered: state.answers.length,
-    question: current ? publicQuestion(current) : null,
+    question: current && (!state.timed || state.questionStartedAt !== null) ? publicQuestion(current) : null,
     deadlineAt: current && state.timed && state.questionStartedAt !== null ? state.questionStartedAt + QUESTION_MS : null,
     completed, ...(completed && summary ? { summary } : {}),
   };
