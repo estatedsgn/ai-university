@@ -43,3 +43,22 @@ jobs:
 
       - name: Check TypeScript and build production bundles
         run: bun run build
+
+      - name: Install local Worker and browser tooling
+        run: |
+          npm install --prefix "$RUNNER_TEMP/aiu-test-tools" --no-audit --no-fund playwright@1.56.1 wrangler@4.146.0
+          "$RUNNER_TEMP/aiu-test-tools/node_modules/.bin/playwright" install --with-deps chromium
+
+      - name: Verify knowledge flow in a real Worker and browser
+        run: node tests/knowledge-smoke.cjs
+        env:
+          AIU_TEST_TOOLS: ${{ runner.temp }}/aiu-test-tools
+
+      - name: Save browser screenshots and verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knowledge-browser-report
+          path: app/test-results/
+          retention-days: 7
+          if-no-files-found: ignore
