@@ -24,7 +24,7 @@
       "color": "#9ab481"
     },
     {
-      "id": "shared",
+      "id": "learning",
       "label": "Связи и цикл",
       "color": "#afa2c5"
     }
@@ -53,14 +53,6 @@
     {
       "id": "review",
       "label": "Повторение"
-    },
-    {
-      "id": "next",
-      "label": "Следующая ступень"
-    },
-    {
-      "id": "goal",
-      "label": "Цель"
     }
   ],
   "edgeTypes": [
@@ -152,8 +144,8 @@
     {
       "id": "goal",
       "title": "Понимать и связывать",
-      "type": "goal",
-      "subject": "shared",
+      "type": "concept",
+      "subject": "learning",
       "x": 500,
       "y": 78,
       "summary": "Из фактов — в собственное объяснение.",
@@ -203,7 +195,7 @@
       "id": "source-agent",
       "title": "Материал от агента",
       "type": "source",
-      "subject": "shared",
+      "subject": "learning",
       "x": 585,
       "y": 567,
       "summary": "Ссылка или текст → проект урока.",
@@ -287,7 +279,7 @@
       "id": "note-bridge",
       "title": "Моя заметка: одна математика",
       "type": "note",
-      "subject": "shared",
+      "subject": "learning",
       "x": 572,
       "y": 408,
       "summary": "Проценты и данные связывают предметы.",
@@ -491,7 +483,7 @@
       "id": "check-transfer",
       "title": "Проверка переноса",
       "type": "check",
-      "subject": "shared",
+      "subject": "learning",
       "x": 677,
       "y": 407,
       "summary": "Применить знакомое в незнакомом.",
@@ -515,7 +507,7 @@
       "id": "review-morning",
       "title": "Утренний обзор",
       "type": "review",
-      "subject": "shared",
+      "subject": "learning",
       "x": 486,
       "y": 465,
       "summary": "Вспомнить без подсказки.",
@@ -527,7 +519,7 @@
       "id": "review-month",
       "title": "Проверка через месяц",
       "type": "review",
-      "subject": "shared",
+      "subject": "learning",
       "x": 555,
       "y": 510,
       "summary": "Снова объяснить и применить.",
@@ -538,7 +530,7 @@
     {
       "id": "next-algebra",
       "title": "Следующая ступень: алгебра",
-      "type": "next",
+      "type": "concept",
       "subject": "math",
       "x": 660,
       "y": 112,
@@ -550,7 +542,7 @@
     {
       "id": "next-finance",
       "title": "Дальше: финансовые модели",
-      "type": "next",
+      "type": "concept",
       "subject": "finance",
       "x": 861,
       "y": 320,
@@ -562,7 +554,7 @@
     {
       "id": "next-biology",
       "title": "Дальше: исследование",
-      "type": "next",
+      "type": "concept",
       "subject": "biology",
       "x": 145,
       "y": 355,
@@ -572,7 +564,7 @@
       "author": "Учебная программа · пример"
     }
   ],
-  "links": [
+  "edges": [
     {
       "from": "goal",
       "to": "note-parts",
