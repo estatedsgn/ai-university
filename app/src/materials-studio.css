@@ -1,0 +1,95 @@
+.ms-studio {
+  --ms-ink: #173d32;
+  --ms-muted: #596a62;
+  --ms-line: #dce6df;
+  --ms-jade: #176b53;
+  --ms-soft: #eff7f1;
+  color: var(--ms-ink);
+  width: 100%;
+  min-width: 0;
+  padding: 12px 0 32px;
+}
+.ms-studio *, .ms-studio *::before, .ms-studio *::after { box-sizing: border-box; }
+.ms-heading { max-width: 720px; margin-bottom: 24px; }
+.ms-eyebrow { color: var(--ms-jade); display: block; font-size: 12px; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; margin-bottom: 9px; }
+.ms-heading h2 { font-size: clamp(25px, 3.5vw, 37px); letter-spacing: -.035em; line-height: 1.18; margin: 0 0 13px; font-weight: 700; overflow-wrap: anywhere; }
+.ms-heading p { color: var(--ms-muted); font-size: 15px; line-height: 1.7; margin: 0; }
+.ms-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); list-style: none; margin: 0 0 25px; padding: 0; gap: 10px; }
+.ms-flow li { display: flex; align-items: center; gap: 9px; background: var(--ms-soft); border: 1px solid var(--ms-line); border-radius: 12px; padding: 13px 14px; font-size: 13px; font-weight: 650; min-width: 0; }
+.ms-flow li span { display: grid; place-items: center; width: 23px; height: 23px; flex: 0 0 23px; border-radius: 50%; color: #fff; background: var(--ms-jade); font-size: 12px; }
+.ms-grid { display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr); align-items: start; gap: 20px; }
+.ms-card { background: #fff; border: 1px solid var(--ms-line); border-radius: 19px; padding: 25px; min-width: 0; box-shadow: 0 4px 18px #173d3205; }
+.ms-card h3 { font-size: 20px; line-height: 1.35; letter-spacing: -.025em; margin: 0 0 12px; overflow-wrap: anywhere; }
+.ms-card p { line-height: 1.65; }
+.ms-mode { border: 0; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; min-width: 0; }
+.ms-mode legend { padding: 0; margin-bottom: 11px; font-size: 14px; font-weight: 650; }
+.ms-mode label { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; padding: 10px 5px; border: 1px solid var(--ms-line); border-radius: 10px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; background: #fafcf9; color: var(--ms-muted); }
+.ms-mode .ms-mode-active { border-color: var(--ms-jade); background: var(--ms-soft); color: var(--ms-ink); }
+.ms-mode input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.ms-mode label:has(input:focus-visible) { outline: 3px solid #8cc7aa; outline-offset: 2px; }
+.ms-mode:disabled label { cursor: wait; opacity: .65; }
+.ms-label { display: block; font-size: 14px; font-weight: 650; margin: 0 0 20px; line-height: 1.5; min-width: 0; }
+.ms-optional { font-size: 12px; font-weight: 400; color: var(--ms-muted); margin-left: 5px; }
+.ms-input { display: block; width: 100%; max-width: 100%; min-width: 0; margin-top: 7px; background: #fbfcfa; border: 1px solid #cfddd3; border-radius: 10px; padding: 11px 12px; color: var(--ms-ink); font: inherit; font-size: 14px; font-weight: 400; line-height: 1.55; }
+.ms-input::placeholder { color: #6c7d73; }
+.ms-input:disabled { background: #f3f6f2; color: #657369; opacity: .8; }
+textarea.ms-input { resize: vertical; overflow-wrap: anywhere; }
+.ms-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; tab-size: 2; }
+.ms-help { display: block; color: var(--ms-muted); font-size: 12px; font-weight: 400; line-height: 1.65; margin: 9px 0 0; overflow-wrap: anywhere; }
+.ms-agent-intro { margin: 0 0 18px; }
+.ms-agent-intro p { font-size: 13px; color: var(--ms-muted); line-height: 1.65; margin: 0 0 8px; }
+.ms-token { padding: 16px; border: 1px solid var(--ms-line); border-radius: 12px; background: #f8fbf6; margin-bottom: 20px; }
+.ms-token .ms-label { margin-bottom: 8px; }
+.ms-token .ms-link-button { margin-top: 8px; }
+.ms-checkbox { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; font-weight: 600; margin: 0 0 17px; cursor: pointer; }
+.ms-checkbox input { margin: 3px 0 0; accent-color: var(--ms-jade); flex: 0 0 16px; width: 16px; height: 16px; }
+.ms-checkbox small { display: block; font-size: 12px; color: var(--ms-muted); font-weight: 400; margin-top: 5px; line-height: 1.55; }
+.ms-button { appearance: none; background: var(--ms-jade); color: #fff; border: 1px solid var(--ms-jade); border-radius: 11px; display: flex; align-items: center; justify-content: center; width: 100%; gap: 8px; font: inherit; font-size: 14px; font-weight: 650; line-height: 1.5; padding: 13px 15px; margin-top: 18px; cursor: pointer; }
+.ms-button:hover:not(:disabled) { background: #12563f; border-color: #12563f; }
+.ms-button:disabled, .ms-link-button:disabled, .ms-recent button:disabled { opacity: .55; cursor: wait; }
+.ms-button:focus-visible, .ms-link-button:focus-visible, .ms-recent button:focus-visible, .ms-input:focus-visible, .ms-checkbox input:focus-visible, .ms-source-link:focus-visible { outline: 3px solid #8cc7aa; outline-offset: 3px; }
+.ms-link-button { appearance: none; font: inherit; font-size: 12px; font-weight: 650; background: transparent; color: var(--ms-jade); border: 0; padding: 4px 0; text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.ms-error { color: #8f3628; background: #fff0eb; border: 1px solid #f1cdc2; padding: 12px 13px; border-radius: 10px; font-size: 13px; overflow-wrap: anywhere; }
+.ms-aside { display: flex; flex-direction: column; min-width: 0; gap: 18px; }
+.ms-empty { background: #f4f8f1; border-color: #d9e5d9; padding-top: 35px; }
+.ms-empty-icon { color: var(--ms-jade); font-size: 38px; line-height: 1; margin-bottom: 18px; }
+.ms-empty p { font-size: 14px; color: var(--ms-muted); }
+.ms-empty p.ms-help { font-size: 12px; }
+.ms-badge { display: inline-block; padding: 6px 8px; border-radius: 7px; color: #885229; background: #fcf1de; font-size: 10px; line-height: 1.5; font-weight: 650; margin-bottom: 15px; }
+.ms-summary { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; color: var(--ms-muted); margin: 0 0 20px; }
+.ms-facts { padding: 14px 0; border-top: 1px solid var(--ms-line); border-bottom: 1px solid var(--ms-line); margin: 0 0 14px; }
+.ms-facts div { display: flex; justify-content: space-between; align-items: baseline; gap: 15px; font-size: 12px; margin-bottom: 8px; }
+.ms-facts div:last-child { margin-bottom: 0; }
+.ms-facts dt { color: var(--ms-muted); }
+.ms-facts dd { font-weight: 650; margin: 0; text-align: right; }
+.ms-source-link { display: inline-block; color: var(--ms-jade); font-size: 13px; text-underline-offset: 3px; }
+.ms-sharing { margin-top: 20px; border-top: 1px solid var(--ms-line); padding-top: 17px; }
+.ms-sharing .ms-label { font-size: 12px; margin-bottom: 6px; }
+.ms-sharing .ms-input { font-size: 12px; }
+.ms-recent-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 9px; margin-bottom: 10px; }
+.ms-recent-heading h3 { font-size: 17px; margin: 0; }
+.ms-recent { list-style: none; margin: 0; padding: 0; }
+.ms-recent li { border-bottom: 1px solid var(--ms-line); }
+.ms-recent li:last-child { border-bottom: 0; }
+.ms-recent button { display: flex; flex-direction: column; gap: 5px; text-align: left; width: 100%; color: var(--ms-ink); font: inherit; font-size: 13px; line-height: 1.5; font-weight: 600; background: transparent; border: 0; padding: 13px 0; cursor: pointer; overflow-wrap: anywhere; }
+.ms-recent small { color: var(--ms-muted); font-size: 11px; font-weight: 400; }
+@media (max-width: 900px) {
+  .ms-grid { grid-template-columns: minmax(0, 1fr); }
+  .ms-aside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+}
+@media (max-width: 620px) {
+  .ms-studio { padding-top: 4px; }
+  .ms-heading { margin-bottom: 20px; }
+  .ms-heading p { font-size: 14px; }
+  .ms-card { padding: 19px 16px; border-radius: 15px; }
+  .ms-flow { gap: 5px; margin-bottom: 18px; }
+  .ms-flow li { flex-direction: column; align-items: flex-start; padding: 10px 8px; font-size: 11px; line-height: 1.5; gap: 7px; }
+  .ms-aside { display: flex; }
+  .ms-mode label { font-size: 12px; padding: 10px 4px; }
+  .ms-input { font-size: 16px; }
+  .ms-code { font-size: 12px; }
+  .ms-optional { display: block; margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ms-studio *, .ms-studio *::before, .ms-studio *::after { scroll-behavior: auto; }
+}
