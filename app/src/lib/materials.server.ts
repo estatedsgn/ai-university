@@ -159,7 +159,7 @@ function htmlToText(html: string): string {
         ? String.fromCodePoint(point) : " ";
     })
     .replace(/&(amp|lt|gt|quot|apos|nbsp);/gi, (_, value: string) =>
-      ({ amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " })[value.toLowerCase()] ?? " ")
+      ({ amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " } as Record<string, string>)[value.toLowerCase()] ?? " ")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -373,7 +373,7 @@ async function importMaterial(request: Request, env: MaterialsEnv): Promise<Resp
   const identity = await getLearningIdentity(request);
   const questions: PrivateQuestion[] = quiz.questions.map((question) => ({
     id: crypto.randomUUID(), kind: "choice", prompt: question.prompt, options: question.options,
-    answer: String(question.correctIndex), explanation: question.explanation, transfer: false,
+    answer: question.options[question.correctIndex], explanation: question.explanation, transfer: false,
   }));
   const row: MaterialRow = {
     id: crypto.randomUUID(), owner_hash: identity.ownerHash, title: title ?? quiz.title,
