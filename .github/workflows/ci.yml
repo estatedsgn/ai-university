@@ -38,5 +38,8 @@ jobs:
       - name: Install locked dependencies
         run: bun install --frozen-lockfile
 
+      - name: Test curriculum, assessment and material import
+        run: bun test src/lib
+
       - name: Check TypeScript and build production bundles
         run: bun run build
