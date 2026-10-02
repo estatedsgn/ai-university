@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { LearningCycle } from "../components/LearningCycle";
+import { KnowledgeHub } from "../components/KnowledgeHub";
 import { RoomExperience } from "../components/RoomExperience";
 import { useRoom } from "../lib/use-room";
 
 export const Route = createFileRoute("/")({ component: Index });
-type Page = "campus" | "programs" | "learning" | "history";
+type Page = "campus" | "knowledge" | "programs" | "learning" | "history";
 type ModalName = "create" | "join" | "enroll" | "profile" | "help" | null;
 export type HistoryEntry = {
   id: string;
@@ -368,7 +369,12 @@ function Index() {
     } catch {
       /* Empty local profile is valid. */
     }
-    const id = new URLSearchParams(window.location.search).get("room");
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("material")) {
+      setPage("knowledge");
+      setWelcome(false);
+    }
+    const id = params.get("room");
     if (id) {
       setRoomLink(id);
       setModal("join");
@@ -399,6 +405,7 @@ function Index() {
       localStorage.setItem("aiu-welcome-choice", choice);
     } catch {}
     if (choice === "learning") go("learning");
+    if (choice === "knowledge") go("knowledge");
     if (choice === "group") open("create");
     if (choice === "pilot") open("enroll");
   }
@@ -530,10 +537,11 @@ function Index() {
           </span>
         </a>
         <div className="sidebar-label">ТВОЙ УНИВЕРСИТЕТ</div>
-        <nav aria-label="Главная навигация">
+        <nav className="university-nav" aria-label="Главная навигация">
           {(
             [
               { id: "campus", label: "Кампус", icon: "campus" },
+              { id: "knowledge", label: "Карта знаний", icon: "book" },
               { id: "programs", label: "Программы", icon: "book" },
               { id: "learning", label: "Моё обучение", icon: "growth" },
               { id: "history", label: "Мои занятия", icon: "calendar" },
@@ -584,7 +592,9 @@ function Index() {
             <b>
               {page === "campus"
                 ? "Кампус"
-                : page === "programs"
+                : page === "knowledge"
+                  ? "Карта знаний"
+                  : page === "programs"
                   ? "Программы"
                   : page === "learning"
                     ? "Моё обучение"
@@ -592,7 +602,7 @@ function Index() {
             </b>
           </span>
           <div className="topbar-actions">
-            <label className="search">
+            {page !== "knowledge" && <label className="search">
               <Icon name="search" size={17} />
               <input
                 aria-label="Найти программу"
@@ -603,7 +613,7 @@ function Index() {
                   if (e.target.value) setPage("programs");
                 }}
               />
-            </label>
+            </label>}
             <button
               className="top-avatar"
               aria-label="Настройки профиля"
@@ -620,7 +630,9 @@ function Index() {
               <h1>
                 {page === "campus"
                   ? `Добро пожаловать${name ? `, ${name}` : " в кампус"}`
-                  : page === "programs"
+                  : page === "knowledge"
+                    ? "Пойми, что ты уже знаешь"
+                    : page === "programs"
                     ? "Найди свою практику"
                     : page === "learning"
                       ? "Знание становится навыком"
@@ -629,7 +641,9 @@ function Index() {
               <p>
                 {page === "campus"
                   ? "Здесь каждый разговор — шаг к новой версии себя."
-                  : page === "programs"
+                  : page === "knowledge"
+                    ? "Связанные темы, свои материалы и следующий понятный шаг."
+                    : page === "programs"
                     ? "Выбери тему и пригласи людей в учебный разговор."
                     : page === "learning"
                       ? "Семь этапов, чтобы понять, попробовать и запомнить."
@@ -647,6 +661,7 @@ function Index() {
                 <span>Выбирай то, к чему есть интерес.</span>
               </div>
               <div>
+                <button onClick={() => chooseWelcome("knowledge")}>Разобраться в предмете</button>
                 <button onClick={() => chooseWelcome("learning")}>Учиться самостоятельно</button>
                 <button onClick={() => chooseWelcome("group")}>Общаться в группе</button>
                 <button onClick={() => chooseWelcome("pilot")}>Стать тестировщиком</button>
@@ -722,6 +737,19 @@ function Index() {
               </div>
             </>
           )}
+          {page === "campus" && (
+            <section className="kh-campus-entry">
+              <div>
+                <span className="kh-eyebrow">ТВОЙ СЛЕДУЮЩИЙ ШАГ</span>
+                <h2>Математика, финансы и биология — в одной карте.</h2>
+                <p>Проверь основы, увидь связи между темами или создай тест по своему материалу.</p>
+              </div>
+              <button className="button secondary" onClick={() => go("knowledge")}>
+                Открыть карту знаний <Icon name="arrow" size={18} />
+              </button>
+            </section>
+          )}
+          {page === "knowledge" && <KnowledgeHub />}
           {(page === "campus" || page === "programs") && (
             <section className="program-section">
               <div className="section-heading">
