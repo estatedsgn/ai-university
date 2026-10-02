@@ -473,7 +473,12 @@ export function AssessmentPlayer({
 
       {error && <p className="kp-error" role="alert">{error}</p>}
       {assessment && !assessment.completed && !assessment.question && !feedback && (
-        <p className="kp-error" role="alert">Сервер не вернул следующий вопрос. Закройте проверку и начните новую попытку.</p>
+        <div className="kp-recovery">
+          <p>Разбор завершён. Откройте следующий вопрос, когда будете готовы: таймер начнётся после нажатия.</p>
+          <button type="button" className="kp-button" disabled={busy} onClick={() => void nextQuestion()}>
+            {busy ? "Открываем…" : "Следующий вопрос"}
+          </button>
+        </div>
       )}
     </section>
   );
