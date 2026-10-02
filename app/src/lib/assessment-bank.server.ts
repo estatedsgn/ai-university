@@ -48,9 +48,9 @@ export function parseNumericAnswer(input: unknown): number | null {
 
 export function gradeAnswer(question: PrivateQuestion, answer: string): boolean {
   if (question.kind === "choice") {
-    return /^\d+$/.test(answer.trim()) &&
-      Number(answer.trim()) === Number(question.answer) &&
-      Number(answer.trim()) < (question.options?.length ?? 0);
+    return typeof question.answer === "string" &&
+      question.options?.includes(answer.trim()) === true &&
+      answer.trim() === question.answer;
   }
   const actual = parseNumericAnswer(answer);
   const expected = parseNumericAnswer(question.answer);
@@ -76,7 +76,7 @@ export function generateQuestions(topicId: string, mode: AssessmentMode): Privat
     }
     questions.push({
       id: crypto.randomUUID(), kind: "choice", prompt, options: indexed.map(v => v.text),
-      answer: String(indexed.findIndex(v => v.correct)), explanation, transfer,
+      answer: indexed.find(v => v.correct)!.text, explanation, transfer,
     });
   };
   switch (topicId) {
