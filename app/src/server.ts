@@ -2,6 +2,8 @@ import "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { handleRooms } from "./lib/rooms.server";
 import { handleEnrollment } from "./lib/enrollment.server";
+import { handleLearning } from "./lib/learning.server";
+import { handleMaterials } from "./lib/materials.server";
 export { Rooms } from "./lib/rooms.server";
 type ServerEntry = {
   fetch: (r: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -47,6 +49,10 @@ export default {
         u.pathname = u.pathname.slice(0, -1);
         return secure(Response.redirect(u.toString(), 301));
       }
+      const learning = await handleLearning(request, env);
+      if (learning) return secure(learning);
+      const materials = await handleMaterials(request, env);
+      if (materials) return secure(materials);
       const enrollment = await handleEnrollment(request, env);
       if (enrollment) return secure(enrollment);
       const room = await handleRooms(request, env);
