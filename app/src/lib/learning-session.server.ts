@@ -15,8 +15,8 @@ export async function getLearningIdentity(request: Request): Promise<{ ownerHash
   if (!/^[a-f0-9]{64}$/.test(id)) {
     const bytes = crypto.getRandomValues(new Uint8Array(32));
     id = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
-    cookie = `${COOKIE_NAME}=${id}; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=2592000`;
   }
+  cookie = `${COOKIE_NAME}=${id}; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=31536000`;
   return { ownerHash: await digest("ai-university:learner:" + id), cookie };
 }
 
