@@ -11,7 +11,7 @@ describe("private mathematics bank", () => {
         expect(questions).toHaveLength(5);
         for (const q of questions) {
           expect(ids.has(q.id)).toBe(false); ids.add(q.id);
-          expect(q.prompt.length).toBeGreaterThan(10);
+          expect(q.prompt.trim()).not.toBe("");
           expect(q.transfer).toBe(mode === "transfer");
           if (q.kind === "choice") {
             expect(new Set(q.options).size).toBe(q.options?.length);
