@@ -23,7 +23,7 @@ type AttemptRow = {
 };
 type ProgressAggregate = {
   topic_id: string; attempts: number; best_score: number; diagnostic_passed: number;
-  transfer_passed: number; transfer_pass_count: number; last_pass_at: number | null;
+  transfer_passed: number; review_count: number; last_pass_at: number | null;
 };
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 const MAX_BODY_BYTES = 16_384;
@@ -102,14 +102,22 @@ function view(row: AttemptRow, state: AttemptState, progress?: TopicProgress[]):
 /** The database aggregates server-created completed attempts, never a browser-provided score. */
 export async function getLearningProgress(db: D1Database, ownerHash: string, now = Date.now()): Promise<TopicProgress[]> {
   const { results } = await db.prepare(
-    `SELECT topic_id, COUNT(*) AS attempts,
-      MAX(CAST(json_extract(state_json, '$.summary.score') AS INTEGER)) AS best_score,
-      MAX(CASE WHEN mode='diagnostic' AND CAST(json_extract(state_json, '$.summary.score') AS INTEGER)>=80 THEN 1 ELSE 0 END) AS diagnostic_passed,
-      MAX(CASE WHEN mode='transfer' AND CAST(json_extract(state_json, '$.summary.score') AS INTEGER)>=80 THEN 1 ELSE 0 END) AS transfer_passed,
-      SUM(CASE WHEN mode='transfer' AND CAST(json_extract(state_json, '$.summary.score') AS INTEGER)>=80 THEN 1 ELSE 0 END) AS transfer_pass_count,
-      MAX(CASE WHEN mode IN ('diagnostic','practice','transfer') AND CAST(json_extract(state_json, '$.summary.score') AS INTEGER)>=80 THEN completed_at ELSE NULL END) AS last_pass_at
-     FROM learning_attempts WHERE owner_hash=? AND topic_id IS NOT NULL AND completed_at IS NOT NULL
-     GROUP BY topic_id`
+    `WITH completed AS (
+      SELECT topic_id, mode, completed_at,
+        CAST(json_extract(state_json, '$.summary.score') AS INTEGER) AS score
+      FROM learning_attempts WHERE owner_hash=? AND topic_id IS NOT NULL AND completed_at IS NOT NULL
+    ), grouped AS (
+      SELECT topic_id, COUNT(*) AS attempts, MAX(score) AS best_score,
+        MAX(CASE WHEN mode='diagnostic' AND score>=80 THEN 1 ELSE 0 END) AS diagnostic_passed,
+        MAX(CASE WHEN mode='transfer' AND score>=80 THEN 1 ELSE 0 END) AS transfer_passed,
+        MIN(CASE WHEN mode='diagnostic' AND score>=80 THEN completed_at ELSE NULL END) AS first_diagnostic_at,
+        MIN(CASE WHEN mode='transfer' AND score>=80 THEN completed_at ELSE NULL END) AS first_transfer_at
+      FROM completed GROUP BY topic_id
+    )
+    SELECT g.topic_id, g.attempts, g.best_score, g.diagnostic_passed, g.transfer_passed,
+      SUM(CASE WHEN c.score>=80 AND c.completed_at>MAX(g.first_diagnostic_at,g.first_transfer_at) THEN 1 ELSE 0 END) AS review_count,
+      MAX(CASE WHEN c.score>=80 THEN c.completed_at ELSE NULL END) AS last_pass_at
+    FROM grouped g JOIN completed c ON c.topic_id=g.topic_id GROUP BY g.topic_id`
   ).bind(ownerHash).all<ProgressAggregate>();
   const aggregates = new Map((results ?? []).map(item => [item.topic_id, item]));
   return TOPICS.map(topic => {
@@ -117,7 +125,7 @@ export async function getLearningProgress(db: D1Database, ownerHash: string, now
     const diagnosticPassed = !!item?.diagnostic_passed;
     const transferPassed = !!item?.transfer_passed;
     const ready = diagnosticPassed && transferPassed;
-    const interval = REVIEW_DAYS[Math.min(Math.max((item?.transfer_pass_count ?? 1) - 1, 0), REVIEW_DAYS.length - 1)];
+    const interval = REVIEW_DAYS[Math.min(Math.max(item?.review_count ?? 0, 0), REVIEW_DAYS.length - 1)];
     const nextReviewAt = ready && item?.last_pass_at ? item.last_pass_at + interval * 86_400_000 : null;
     return {
       topicId: topic.id, attempts: item?.attempts ?? 0, bestScore: item?.best_score ?? 0,
