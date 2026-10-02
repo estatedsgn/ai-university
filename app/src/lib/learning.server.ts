@@ -187,7 +187,7 @@ async function start(db: D1Database, ownerHash: string, input: Record<string, un
   } else {
     if (!UUID.test(input.materialId as string)) throw new HttpError(404, "Материал не найден.");
     const material = await db.prepare(
-      "SELECT id, title, questions_json FROM learning_materials WHERE id=? AND (owner_hash=? OR visibility='unlisted')"
+      "SELECT id, title, questions_json FROM materials WHERE id=? AND (owner_hash=? OR visibility='unlisted')"
     ).bind(input.materialId, ownerHash).first<{ id: string; title: string; questions_json: string }>();
     if (!material) throw new HttpError(404, "Материал не найден или доступен только автору.");
     questions = shuffled(validateImportedQuestions(JSON.parse(material.questions_json)));
@@ -280,7 +280,7 @@ async function activateNext(db: D1Database, ownerHash: string, id: string): Prom
 /** Sequential owned assessments, with server-only grading and no claim of cheat-proof testing. */
 export async function handleLearning(request: Request, env: unknown): Promise<Response | null> {
   const url = new URL(request.url);
-  if (!url.pathname.startsWith("/api/learning/")) return null;
+  if (!url.pathname.startsWith("/api/learning/") || url.pathname.startsWith("/api/learning/materials")) return null;
   const route = url.pathname;
   const assessmentMatch = route.match(/^\/api\/learning\/assessments\/([^/]+)$/);
   const nextMatch = route.match(/^\/api\/learning\/assessments\/([^/]+)\/next$/);
