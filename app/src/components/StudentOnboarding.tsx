@@ -38,7 +38,7 @@ export function StudentOnboarding({ onOpenKnowledge }: { onOpenKnowledge: (topic
   }
   function next(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (step === 0 && !validProfile({ ...profile, goal: profile.goal.trim() })) {
+    if (step === 0 && !validProfile({ ...profile, goal: profile.goal.trim().replace(/\s+/g, " ") })) {
       if (profile.goal.trim().length < 5 || profile.goal.trim().length > 500) {
         setError("Опиши цель хотя бы пятью символами, не более 500.");
         return;
@@ -46,7 +46,7 @@ export function StudentOnboarding({ onOpenKnowledge }: { onOpenKnowledge: (topic
     }
     setError("");
     if (step === QUESTIONS.length - 1) {
-      const clean = { ...profile, goal: profile.goal.trim() };
+      const clean = { ...profile, goal: profile.goal.trim().replace(/\s+/g, " ") };
       if (!validProfile(clean)) {
         setError("Проверь ответы перед продолжением.");
         return;
