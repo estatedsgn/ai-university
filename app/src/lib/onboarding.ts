@@ -34,10 +34,10 @@ export function validProfile(value: unknown): value is LearnerProfile {
   const p = value as Record<string, unknown>;
   return typeof p.goal === "string" && p.goal.trim().length >= 5 && p.goal.trim().length <= 500 &&
     !/[\x00-\x1f\x7f]/.test(p.goal) &&
-    ["math", "finance", "biology", "unsure"].includes(String(p.interest)) &&
-    ["new", "some", "confident"].includes(String(p.experience)) &&
-    [15, 30, 60].includes(Number(p.minutes)) &&
-    ["explain", "practice", "mixed"].includes(String(p.format));
+    typeof p.interest === "string" && ["math", "finance", "biology", "unsure"].includes(p.interest) &&
+    typeof p.experience === "string" && ["new", "some", "confident"].includes(p.experience) &&
+    typeof p.minutes === "number" && [15, 30, 60].includes(p.minutes) &&
+    typeof p.format === "string" && ["explain", "practice", "mixed"].includes(p.format);
 }
 
 export function inferSubject(goal: string): SubjectId {
