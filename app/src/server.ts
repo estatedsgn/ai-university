@@ -3,6 +3,8 @@ import { renderErrorPage } from "./lib/error-page";
 import { handleRooms } from "./lib/rooms.server";
 import { handleEnrollment } from "./lib/enrollment.server";
 import { handleOnboarding } from "./lib/onboarding.server";
+import { handleOracle } from "./lib/oracle.server";
+import { handleSourceProposals } from "./lib/source-proposals.server";
 import { handleLearning } from "./lib/learning.server";
 import { handleMaterials } from "./lib/materials.server";
 export { Rooms } from "./lib/rooms.server";
@@ -50,6 +52,10 @@ export default {
         u.pathname = u.pathname.slice(0, -1);
         return secure(Response.redirect(u.toString(), 301));
       }
+      const oracle = await handleOracle(request, env);
+      if (oracle) return secure(oracle);
+      const sources = await handleSourceProposals(request, env);
+      if (sources) return secure(sources);
       const onboarding = await handleOnboarding(request, env);
       if (onboarding) return secure(onboarding);
       const learning = await handleLearning(request, env);
