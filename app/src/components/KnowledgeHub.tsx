@@ -36,10 +36,10 @@ function progressLabel(progress?: TopicProgress) {
 function dateLabel(value: number) {
   return new Date(value).toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
 }
-export function KnowledgeHub() {
+export function KnowledgeHub({ initialTopicId }: { initialTopicId?: string }) {
   const [tab, setTab] = useState<Tab>("topics");
-  const [subject, setSubject] = useState<SubjectId>("math");
-  const [selectedId, setSelectedId] = useState("math-arithmetic");
+  const [subject, setSubject] = useState<SubjectId>(() => getTopic(initialTopicId ?? "")?.subjectId ?? "math");
+  const [selectedId, setSelectedId] = useState(initialTopicId && getTopic(initialTopicId) ? initialTopicId : "math-arithmetic");
   const [search, setSearch] = useState("");
   const [branch, setBranch] = useState("");
   const [level, setLevel] = useState("");
@@ -76,7 +76,7 @@ export function KnowledgeHub() {
   useEffect(() => {
     void refreshProgress();
     try {
-      const saved = localStorage.getItem("aiu-knowledge-subject");
+      const saved = initialTopicId ? null : localStorage.getItem("aiu-knowledge-subject");
       if (SUBJECTS.some((item) => item.id === saved)) {
         const next = saved as SubjectId;
         setSubject(next);
