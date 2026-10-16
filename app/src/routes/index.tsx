@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { LearningCycle } from "../components/LearningCycle";
+import { StudentOnboarding } from "../components/StudentOnboarding";
 import { KnowledgeHub } from "../components/KnowledgeHub";
 import { RoomExperience } from "../components/RoomExperience";
 import { useRoom } from "../lib/use-room";
 
 export const Route = createFileRoute("/")({ component: Index });
-type Page = "campus" | "knowledge" | "programs" | "learning" | "history";
+type Page = "campus" | "onboarding" | "knowledge" | "programs" | "learning" | "history";
 type ModalName = "create" | "join" | "enroll" | "profile" | "help" | null;
 export type HistoryEntry = {
   id: string;
@@ -334,6 +335,7 @@ function OrbitArt() {
 function Index() {
   const [welcome, setWelcome] = useState(true);
   const [page, setPage] = useState<Page>("campus");
+  const [startingTopicId, setStartingTopicId] = useState<string | undefined>();
   const [modal, setModal] = useState<ModalName>(null);
   const [topic, setTopic] = useState("listening");
   const [name, setName] = useState("");
@@ -404,6 +406,7 @@ function Index() {
     try {
       localStorage.setItem("aiu-welcome-choice", choice);
     } catch {}
+    if (choice === "onboarding") go("onboarding");
     if (choice === "learning") go("learning");
     if (choice === "knowledge") go("knowledge");
     if (choice === "group") open("create");
@@ -541,6 +544,7 @@ function Index() {
           {(
             [
               { id: "campus", label: "Кампус", icon: "campus" },
+              { id: "onboarding", label: "Мой учебный маршрут", icon: "growth" },
               { id: "knowledge", label: "Карта знаний", icon: "book" },
               { id: "programs", label: "Программы", icon: "book" },
               { id: "learning", label: "Моё обучение", icon: "growth" },
@@ -592,6 +596,8 @@ function Index() {
             <b>
               {page === "campus"
                 ? "Кампус"
+                : page === "onboarding"
+                  ? "Мой учебный маршрут"
                 : page === "knowledge"
                   ? "Карта знаний"
                   : page === "programs"
@@ -630,6 +636,8 @@ function Index() {
               <h1>
                 {page === "campus"
                   ? `Добро пожаловать${name ? `, ${name}` : " в кампус"}`
+                  : page === "onboarding"
+                    ? "Найдём твой путь в обучении"
                   : page === "knowledge"
                     ? "Пойми, что ты уже знаешь"
                     : page === "programs"
@@ -641,6 +649,8 @@ function Index() {
               <p>
                 {page === "campus"
                   ? "Здесь каждый разговор — шаг к новой версии себя."
+                  : page === "onboarding"
+                    ? "Сначала цель, потом диагностика и маршрут по реальным темам."
                   : page === "knowledge"
                     ? "Связанные темы, свои материалы и следующий понятный шаг."
                     : page === "programs"
@@ -661,6 +671,7 @@ function Index() {
                 <span>Выбирай то, к чему есть интерес.</span>
               </div>
               <div>
+                <button onClick={() => chooseWelcome("onboarding")}>Подобрать личный учебный маршрут</button>
                 <button onClick={() => chooseWelcome("knowledge")}>Разобраться в предмете</button>
                 <button onClick={() => chooseWelcome("learning")}>Учиться самостоятельно</button>
                 <button onClick={() => chooseWelcome("group")}>Общаться в группе</button>
@@ -749,7 +760,8 @@ function Index() {
               </button>
             </section>
           )}
-          {page === "knowledge" && <KnowledgeHub />}
+          {page === "onboarding" && <StudentOnboarding onOpenKnowledge={(topicId) => { setStartingTopicId(topicId); go("knowledge"); }} />}
+          {page === "knowledge" && <KnowledgeHub initialTopicId={startingTopicId} />}
           {(page === "campus" || page === "programs") && (
             <section className="program-section">
               <div className="section-heading">
