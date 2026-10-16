@@ -2,12 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { LearningCycle } from "../components/LearningCycle";
 import { StudentOnboarding } from "../components/StudentOnboarding";
+import { DegreeWorkspace } from "../components/DegreeWorkspace";
 import { KnowledgeHub } from "../components/KnowledgeHub";
 import { RoomExperience } from "../components/RoomExperience";
 import { useRoom } from "../lib/use-room";
 
 export const Route = createFileRoute("/")({ component: Index });
-type Page = "campus" | "onboarding" | "knowledge" | "programs" | "learning" | "history";
+type Page = "campus" | "onboarding" | "degree" | "knowledge" | "programs" | "learning" | "history";
 type ModalName = "create" | "join" | "enroll" | "profile" | "help" | null;
 export type HistoryEntry = {
   id: string;
@@ -545,6 +546,7 @@ function Index() {
             [
               { id: "campus", label: "Кампус", icon: "campus" },
               { id: "onboarding", label: "Мой учебный маршрут", icon: "growth" },
+              { id: "degree", label: "Инженерия ИИ", icon: "book" },
               { id: "knowledge", label: "Карта знаний", icon: "book" },
               { id: "programs", label: "Программы", icon: "book" },
               { id: "learning", label: "Моё обучение", icon: "growth" },
@@ -598,6 +600,8 @@ function Index() {
                 ? "Кампус"
                 : page === "onboarding"
                   ? "Мой учебный маршрут"
+                : page === "degree"
+                  ? "Инженерия ИИ"
                 : page === "knowledge"
                   ? "Карта знаний"
                   : page === "programs"
@@ -638,6 +642,8 @@ function Index() {
                   ? `Добро пожаловать${name ? `, ${name}` : " в кампус"}`
                   : page === "onboarding"
                     ? "Найдём твой путь в обучении"
+                  : page === "degree"
+                    ? "Инженерия искусственного интеллекта"
                   : page === "knowledge"
                     ? "Пойми, что ты уже знаешь"
                     : page === "programs"
@@ -651,6 +657,8 @@ function Index() {
                   ? "Здесь каждый разговор — шаг к новой версии себя."
                   : page === "onboarding"
                     ? "Сначала цель, потом диагностика и маршрут по реальным темам."
+                  : page === "degree"
+                    ? "Выбери нагрузку, изучай курсы и проверяй себя на практике."
                   : page === "knowledge"
                     ? "Связанные темы, свои материалы и следующий понятный шаг."
                     : page === "programs"
@@ -761,6 +769,7 @@ function Index() {
             </section>
           )}
           {page === "onboarding" && <StudentOnboarding onOpenKnowledge={(topicId) => { setStartingTopicId(topicId); go("knowledge"); }} />}
+          {page === "degree" && <DegreeWorkspace onOpenTopic={(topicId) => { setStartingTopicId(topicId); go("knowledge"); }} />}
           {page === "knowledge" && <KnowledgeHub initialTopicId={startingTopicId} />}
           {(page === "campus" || page === "programs") && (
             <section className="program-section">
