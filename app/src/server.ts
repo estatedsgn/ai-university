@@ -2,6 +2,7 @@ import "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { handleRooms } from "./lib/rooms.server";
 import { handleEnrollment } from "./lib/enrollment.server";
+import { handleOnboarding } from "./lib/onboarding.server";
 import { handleLearning } from "./lib/learning.server";
 import { handleMaterials } from "./lib/materials.server";
 export { Rooms } from "./lib/rooms.server";
@@ -49,6 +50,8 @@ export default {
         u.pathname = u.pathname.slice(0, -1);
         return secure(Response.redirect(u.toString(), 301));
       }
+      const onboarding = await handleOnboarding(request, env);
+      if (onboarding) return secure(onboarding);
       const learning = await handleLearning(request, env);
       if (learning) return secure(learning);
       const materials = await handleMaterials(request, env);
